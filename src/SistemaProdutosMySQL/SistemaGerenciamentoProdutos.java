@@ -28,16 +28,16 @@ public class SistemaGerenciamentoProdutos {
 
       switch (escolha) {
         case 1:
-          addNewProduct(listaProdutos, true);
+          addNewProduct(true);
           break;
         case 2:
-          addNewProduct(listaProdutos, false);
+          addNewProduct(false);
           break;
         case 3:
-          checkProducts(listaProdutos);
+          checkProducts();
           break;
         case 4:
-          updateProductQuantity(listaProdutos);
+          updateProductQuantity();
           break;
         case 5:
           closeSystem();
@@ -49,7 +49,7 @@ public class SistemaGerenciamentoProdutos {
     }
   }
 
-  public static String addNewProduct(ArrayList<Produto> listaProdutos, boolean isPerecivel) {
+  public static String addNewProduct(boolean isPerecivel) {
     String sql;
     System.out.println();
     System.out.println("## Adicionar produto ##");
@@ -59,7 +59,7 @@ public class SistemaGerenciamentoProdutos {
       System.out.println("Código: ");
       codigoProduto = scan.nextInt();
       scan.nextLine();
-      validCode = validateCode(listaProdutos, codigoProduto);
+      validCode = validateCode(codigoProduto);
     } while (validCode != 1);
     System.out.println("Nome: ");
     String nomeProduto = scan.nextLine();
@@ -93,7 +93,7 @@ public class SistemaGerenciamentoProdutos {
     return "\nProduto não pôde ser adicionado!";
   }
 
-  public static void checkProducts(ArrayList<Produto> listaProdutos) {
+  public static void checkProducts() {
     System.out.println();
     System.out.println("## Consultar produtos ##");
     for (Produto produto : listaProdutos) {
@@ -103,7 +103,7 @@ public class SistemaGerenciamentoProdutos {
     systemMenu();
   }
 
-  public static String updateProductQuantity(ArrayList<Produto> listaProdutos) {
+  public static String updateProductQuantity() {
     System.out.println();
     System.out.println("## Adicionar estoque ##");
     System.out.println("Digite o código do produto: ");
@@ -116,13 +116,21 @@ public class SistemaGerenciamentoProdutos {
     for (Produto produto : listaProdutos) {
       if (produto.getCodigo() == codigoEstoque) {
         produto.adicionarEstoque(quantidadeAdd);
-        return "Quantidade atualizada com sucesso!";
+        String sql = "UPDATE Produto SET quantidade = " + produto.getQuantidade() + " WHERE codigo = " + produto.getCodigo();
+        database.openDatabase();
+        try {
+          database.executeQuery(sql);
+          return "Quantidade atualizada com sucesso!";
+        } catch (Exception error) {
+          error.printStackTrace();
+        }
       }
     }
+
     return "Houve um erro ao atualizar a quantidade!";
   }
 
-  public static int validateCode (ArrayList<Produto> listaProdutos, int codigoProduto) {
+  public static int validateCode (int codigoProduto) {
     for (Produto produto : listaProdutos) {
       if (produto.getCodigo() == codigoProduto) return 0;
     }
