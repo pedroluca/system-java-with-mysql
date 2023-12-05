@@ -93,26 +93,36 @@ public class SistemaGerenciamentoProdutos {
     return "\nProduto não pôde ser adicionado!";
   }
 
-  public static void checkProducts() {
+  public static int checkProducts() {
     System.out.println();
-    System.out.println("## Consultar produtos ##");
+    System.out.println("## Produtos ##");
     for (Produto produto : listaProdutos) {
       System.out.println(produto);
     }
     System.out.println();
-    systemMenu();
+    return 0;
   }
 
   public static String updateProductQuantity() {
+    int validCode = 0, codigoEstoque;
     System.out.println();
     System.out.println("## Adicionar estoque ##");
-    System.out.println("Digite o código do produto: ");
-    int codigoEstoque = scan.nextInt();
-    scan.nextLine();
+    checkProducts();
+    do {
+      if (validCode != 0) System.out.println("O código informado é inválido!");
+      System.out.println("Digite o código do produto: ");
+      codigoEstoque = scan.nextInt();
+      scan.nextLine();
+      validCode = validateCode(codigoEstoque);
+    } while (validCode != 0);
+    for (Produto produto : listaProdutos) {
+      if (produto.getCodigo() == codigoEstoque) {
+        System.out.println("Produto: " + produto.getNome() + " | Quantidade atual: " + produto.getQuantidade());
+      }
+    }
     System.out.println("Digite a quantidade a ser adicionada: ");
     int quantidadeAdd = scan.nextInt();
     scan.nextLine();
-
     for (Produto produto : listaProdutos) {
       if (produto.getCodigo() == codigoEstoque) {
         produto.adicionarEstoque(quantidadeAdd);
@@ -126,7 +136,6 @@ public class SistemaGerenciamentoProdutos {
         }
       }
     }
-
     return "Houve um erro ao atualizar a quantidade!";
   }
 
