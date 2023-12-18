@@ -1,18 +1,32 @@
 package SistemaProdutosMySQL;
 
-public class Produto {
-  private int codigo;
-  private String nome;
-  private double preco;
-  private int quantidade;
+public interface Produto {
+  // private int codigo;
+  // private String nome;
+  // private double preco;
+  // private int quantidade;
 
-  public Produto(int codigo, String nome, double preco, int quantidade) {
-    this.codigo = codigo;
-    this.nome = nome;
-    this.preco = preco;
-    this.quantidade = quantidade;
-  }
+  // public Produto(int codigo, String nome, double preco, int quantidade) {
+  //   this.codigo = codigo;
+  //   this.nome = nome;
+  //   this.preco = preco;
+  //   this.quantidade = quantidade;
+  // }
 
+  public int getCodigo();
+
+  public String getNome();
+
+  public double getPreco();
+
+  public int getQuantidade();
+
+  public void adicionarEstoque(int quantidade);
+
+  @Override
+  public String toString();
+
+  /*
   public int getCodigo() {
     return codigo;
   }
@@ -37,5 +51,5 @@ public class Produto {
   @Override
   public String toString() {
     return "Código: " + codigo + ", Nome: " + nome + ", Preço: R$" + preco + ", Quantidade: " + quantidade;
-  }
+  } */
 }
